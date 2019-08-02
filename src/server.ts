@@ -66,7 +66,9 @@ app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
 // These routes use the Universal engine
 dotenv.config({ path: findconfig('.env') })
 const BASE_URL  = process.env.BASE_URL || '';
-createRoutes(app,BASE_URL,BASE_URL)    
+   
+//createRoutes(app,BASE_URL,BASE_URL)  
+createRoutes(app,BASE_URL,'/subject')
 
 // Start up the Node server
 app.listen(PORT, () => {
