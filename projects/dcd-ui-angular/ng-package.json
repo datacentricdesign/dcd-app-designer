@@ -5,10 +5,10 @@
     "entryFile": "src/public-api.ts"
   },
   "whitelistedNonPeerDependencies": [
-    "@swimlane/ngx-charts",
-    "babel",
-    "chart.js",
-    "d3-shape",
-    "ng2-charts"
+    "@angular/animations",
+    "@angular/forms",
+    "@angular/platform-browser",
+    "primeicons",
+    "primeng"
   ]
 }
