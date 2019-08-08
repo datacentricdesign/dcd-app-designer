@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/datacentricdesign/dcd-data-subject"
+    "url": "https://github.com/datacentricdesign/dcd-designer"
   },
   "scripts": {
     "ng": "ng",
