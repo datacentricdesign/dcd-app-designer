@@ -9,6 +9,6 @@
       <h3>MODE : {{mode}}</h3>
 </div>
 <div class = "display-container">
-    <lib-property-types [properties]="properties" *ngIf="checked"></lib-property-types>
-    <lib-data-collections *ngIf="!checked"></lib-data-collections>
+    <lib-property-types [properties]="properties" *ngIf="!checked"></lib-property-types>
+    <lib-data-collections *ngIf="checked"></lib-data-collections>
 </div>

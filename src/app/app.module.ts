@@ -42,6 +42,7 @@ import { MyThingsComponent } from './my-things/my-things.component'
       {path : 'page/home', component : HomeComponent, pathMatch: 'full' },
       {path : 'page/user', component : UserComponent, pathMatch: 'full' },
       {path : 'page/about', component : AboutComponent, pathMatch: 'full'},
+      {path : 'page/things', component : MyThingsComponent, pathMatch:'full'},
       {path : 'page/notifications', component : NotificationsComponent, pathMatch: 'full'},
       {path : '**',redirectTo: '/page/home',pathMatch: 'full'},
     ]),
