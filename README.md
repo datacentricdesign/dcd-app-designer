@@ -1,14 +1,15 @@
-# dcd-designer
+# dcd-data-subject
 
 ## production mode
 
-- **src/index.html** => `<base href="/designer/">`
 - `npm run prod`
-- go to `http://localhost:8080/designer/`
+- go to `http://localhost:8080/subject/`
 
-## development mode
+## development mode : watch
 
-- **src/index.html** => `<base href="/">`
-- `npm run dev`
-- go to `http://localhost:8080/`
-- refresh the page each change
+2 terminals :
+
+- `npm run build:watch` in one
+- `npm run dev` in another
+- go to `http://localhost:8080/subject`
+- refresh page each change
