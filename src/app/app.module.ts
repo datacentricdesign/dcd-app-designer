@@ -7,7 +7,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 //Components
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
-import {AboutComponent} from './about/about.component';
 import {NotificationsComponent} from './notifications/notifications.component';
 import { NavbarComponent} from './navbar/navbar.component';
 import {UserComponent} from './user/user.component';
@@ -25,18 +24,25 @@ import {MatInputModule} from '@angular/material';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatTableModule} from '@angular/material/table';
+import {MatDialogModule} from '@angular/material/dialog';
 
 //prime-ng
 import {CalendarModule} from 'primeng/calendar';
+import {ButtonModule} from 'primeng/button';
+import {DialogModule} from 'primeng/dialog';
 
 //@datacentricdesign/ui-angular
 import {UiAngularModule} from '@datacentricdesign/ui-angular';
+
+//To DELETE
+/*import {HttpClientService} from './http-client.service'*/
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    AboutComponent,
     NotificationsComponent,
     NavbarComponent,
     UserComponent,
@@ -49,7 +55,6 @@ import {UiAngularModule} from '@datacentricdesign/ui-angular';
     RouterModule.forRoot([
       {path : 'page/home', component : HomeComponent, pathMatch: 'full' },
       {path : 'page/user', component : UserComponent, pathMatch: 'full' },
-      {path : 'page/about', component : AboutComponent, pathMatch: 'full'},
       {path : 'page/things', component : MyThingsComponent, pathMatch:'full'},
       {path : 'page/notifications', component : NotificationsComponent, pathMatch: 'full'},
       {path : 'page/tasks', component : TasksComponent, pathMatch:'full'},
@@ -66,9 +71,15 @@ import {UiAngularModule} from '@datacentricdesign/ui-angular';
     MatInputModule,
     MatSelectModule,
     MatCardModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatTableModule,
+    MatDialogModule,
+    ButtonModule,
+    DialogModule
+
   ],
   providers: [
+    //HttpClientService
   ],
   bootstrap: [AppComponent]
 })

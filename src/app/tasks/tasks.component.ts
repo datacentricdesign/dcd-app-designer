@@ -13,22 +13,8 @@ export class TasksComponent implements OnInit {
   new_task_name : string
   new_task_types : string[]
   new_task_range : Date[]
+  new_task_description:string
   dateTime = new Date();
-
-  stat_task_type : string = "LOCATION"
-  stat_task_range : Date[]
-
-  total_persons : number
-  total_things : number
-  total_properties : number
-
-  type_total_entities : number
-  type_total_properties : number
-  type_total_values : number
-
-  type_range_entities : number
-  type_range_properties : number
-  type_range_values : number
   
 
   constructor(@Inject(
@@ -44,81 +30,7 @@ export class TasksComponent implements OnInit {
       }
     }
 
-EntitiesPercentage():number{
-if(this.type_total_entities && this.type_total_entities){
-  return Math.round((this.type_range_entities/this.type_total_entities)*100)
-}else{
-  return 0
-}
-}
-
-PropertiesPercentage():number{
-  if(this.type_total_properties && this.type_range_properties){
-    return Math.round((this.type_range_properties/this.type_total_properties)*100)
-  }else{
-    return 0
-  }
-}
-
-ValuesPercentage():number{
-  if(this.type_total_values && this.type_total_values){
-    return Math.round((this.type_range_values/this.type_total_values)*100)
-  }else{
-    return 0
-  }
-}
-
-GetStatsValues(PropertyType:string,from:number=undefined,to:number=undefined){
-  if(from && to){
-    this.service.get('api/stats/'+PropertyType+'?from=' + from + '&to=' + to).subscribe(
-      data => {
-        this.type_total_entities = data['stat'].total_entities
-        this.type_total_properties = data['stat'].total_properties
-        this.type_total_values = data['stat'].total_values
-        
-        this.type_range_entities = data['stat'].total_entities
-        this.type_range_properties = data['stat'].range.properties
-        this.type_range_values = data['stat'].range.values
-      })
-  }else{
-    this.service.get('api/stats/'+PropertyType).subscribe(
-      data => {
-        this.type_total_entities = data['stat'].total_entities
-        this.type_total_properties = data['stat'].total_properties
-        this.type_total_values = data['stat'].total_values
-        
-        this.type_range_entities = data['stat'].total_entities
-        this.type_range_properties = data['stat'].range.properties
-        this.type_range_values = data['stat'].range.values
-      })
-  }
-  
-}
-
-OnChange(){
-if(this.stat_task_range){
-  if(this.stat_task_range.length == 2){
-    if(this.stat_task_range[0] && this.stat_task_range[1]){
-      this.GetStatsValues(this.stat_task_type,this.stat_task_range[0].getTime(),this.stat_task_range[1].getTime())
-    }
-  }else{
-    this.GetStatsValues(this.stat_task_type)
-  }
-}else{
-    this.GetStatsValues(this.stat_task_type)
-}
-
-}
-
 BrowserUniversalInit(){
-      this.service.get('api/stats').subscribe(
-        data => {
-          this.total_persons = data['stat'].persons
-          this.total_things = data['stat'].things
-          this.total_properties = data['stat'].properties
-        })
-      
-      this.GetStatsValues(this.stat_task_type)
 }
 
 GetPropertyType():string[]{
@@ -129,8 +41,20 @@ GetPropertyType():string[]{
     return res
 }
 
-CreateTask(task_name:string,task_types:string[],task_range:Date[]){
-    console.log(task_name,task_types,task_range)
+CreateTask(task_name:string,task_types:string[],task_range:Date[],task_description:string){
+    console.log(task_name,task_types,task_range,task_description)
+    this.tasks.push(
+      new Task(
+        undefined,
+        task_name,
+        task_types,
+        task_range[0].getTime(),
+        task_range[1].getTime(),
+        task_description,
+        new Date().getTime(),
+        'irompion@yahoo.fr'
+        )
+      )
 }
 
 CheckTask():boolean{
@@ -144,18 +68,88 @@ CheckTask():boolean{
        return true
      }
 }
+
+TaskPercentage(task:Task):number{
+return 50
+}
+
+OnChange(){
+  //console.log(this.new_task_types)
+}
+
+display_task : boolean = false
+task_picked : Task = new Task('','',undefined,undefined,undefined,undefined,undefined,undefined)
+
+tasks:Task[] = [
+
+new Task(
+  'id1',
+'task1',
+['LOCATION'],
+0,
+new Date().getTime(),
+"We wan't your location for a study",
+new Date(2019,1,1).getTime(),
+'actor_entity_id1'
+),
+
+new Task(
+  'id3',
+'task3',
+['THREE_DIMENSIONS'],
+new Date(2019,3,1).getTime(),
+new Date().getTime(),
+"We wan't your location for a study",
+new Date(2019,3,1).getTime(),
+'actor_entity_id1'
+)
+
+]
+
+async setChild(task : Task){
+  this.task_picked = task
+}
+
+showDialog_Task(task : Task) {
+    this.setChild(task).then(()=>this.display_task = true)
+    
+}
+
 }
 
 export class Task {
+
+  id : string
   name: string;
   types:string[];
   from : number 
   to : number 
+  description:string
+  registred_at:number
+  actor_entity_id : string
 
-  constructor(name:string,types:string[],from:number,to:number){
+  constructor(
+    id:string,
+    name:string,
+    types:string[],
+    from:number,
+    to:number,
+    description:string,
+    registred_at:number,
+    actor_entity_id : string
+    ){
+    this.id = id
     this.name = name
     this.types = types
     this.from = from
     this.to = to
+    this.description = description
+    this.registred_at = registred_at
+    this.actor_entity_id = actor_entity_id
   }
+
+  getDate():Date{
+    return new Date(this.registred_at)
+  }
+
 }
