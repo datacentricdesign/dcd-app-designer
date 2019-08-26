@@ -20,7 +20,7 @@
                                 </mat-select>
                         </mat-form-field>
 
-                        <textarea placeholder="Description" cols="50" rows="10"></textarea>
+                        <textarea placeholder="Description" [(ngModel)]="new_task_description" cols="50" rows="10"></textarea>
                     
                         <p-calendar placeholder="Range date" [(ngModel)]="new_task_range" selectionMode="range" [readonlyInput]="true"></p-calendar>
                     
@@ -84,12 +84,14 @@
                   <vertical-timeline> 
 
                                 <vertical-timeline-card *ngFor="let milestone of resource.milestones" [dateValue]="getDate(milestone.timestamp)">
-                                        <div class = "milestone-status">
-                                                                Status  :    {{milestone.status}}
-                                        </div>
-                                        
-                                        <div class = "milestone-shared-properties">
-                                                                {{milestone.shared_properties.join()}}
+                                        <div style="overflow: auto">
+                                                <div class = "milestone-status">
+                                                                        Status  :    {{milestone.status}}
+                                                </div>
+                                                
+                                                <div class = "milestone-shared-properties">
+                                                                        {{milestone.shared_properties.join()}}
+                                                </div>   
                                         </div>    
 
                                 </vertical-timeline-card>
