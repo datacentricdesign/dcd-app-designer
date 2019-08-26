@@ -1,5 +1,5 @@
 import { Component,Inject,PLATFORM_ID, OnInit } from '@angular/core';
-import { PropertyType, HttpClientService } from '@datacentricdesign/ui-angular'
+import { PropertyType,Task, Resource, Milestone, HttpClientService } from '@datacentricdesign/ui-angular'
 import {isPlatformServer} from "@angular/common";
 
 @Component({
@@ -9,6 +9,13 @@ import {isPlatformServer} from "@angular/common";
 })
 
 export class TasksComponent implements OnInit {
+
+  actor_entity_id :string
+
+  display_task : boolean = false
+  task_picked : Task = new Task({})
+
+  tasks:Task[] = []
 
   new_task_name : string
   new_task_types : string[]
@@ -31,6 +38,21 @@ export class TasksComponent implements OnInit {
     }
 
 BrowserUniversalInit(){
+  this.service.get('api/user').subscribe(
+    data => {
+      this.actor_entity_id = data['sub'].split('dcd:persons:')[1]
+    })
+  
+  this.service.get('api/tasks').subscribe(
+    data1 => {
+      data1['tasks'].actor_tasks.forEach(task_params => {
+        const params_task = task_params
+        this.service.get('api/tasks/'+task_params['id']+'/resources?actor=true').subscribe(
+          data2 => {
+            this.tasks.push(new Task(params_task,data2['resources']))
+          })
+      });
+    })
 }
 
 GetPropertyType():string[]{
@@ -42,19 +64,27 @@ GetPropertyType():string[]{
 }
 
 CreateTask(task_name:string,task_types:string[],task_range:Date[],task_description:string){
-    console.log(task_name,task_types,task_range,task_description)
-    this.tasks.push(
-      new Task(
-        undefined,
-        task_name,
-        task_types,
-        task_range[0].getTime(),
-        task_range[1].getTime(),
-        task_description,
-        new Date().getTime(),
-        'irompion@yahoo.fr'
-        )
-      )
+  if ( confirm( "Create "+task_name+", asking for "+task_types.join()+" from : "+task_range[0]+", to : "+task_range[1]+ " ?" )) {
+    const task_json = {
+      name: task_name,
+      description: task_description,
+      types: task_types,
+      from : task_range[0].getTime(),
+      to : task_range[1].getTime(),
+      actor_entity_id : this.actor_entity_id
+  }
+    this.service.post('api/tasks',task_json).subscribe(
+      data1 => {
+        let task_params = data1['task']
+        this.service.get('api/tasks/'+task_params.id+'/resources?actor=true').subscribe(
+          data2 => {
+            let task = new Task(task_params,data2['resources'])
+            task.registered_at = Date.now()
+            this.tasks.push(task)
+          })
+      }
+    )
+  }
 }
 
 CheckTask():boolean{
@@ -70,86 +100,36 @@ CheckTask():boolean{
 }
 
 TaskPercentage(task:Task):number{
-return 50
+// Just checking if there is more than the initial milestone by resources
+const num_resources = task.resources.length
+let num_responses = 0
+let check_number = 0
+
+for(var resource of task.resources){
+check_number ++
+
+if(resource.milestones.length>1){
+num_responses ++
 }
 
-OnChange(){
-  //console.log(this.new_task_types)
+if(check_number == num_resources){
+  return Math.ceil((num_responses/num_resources)*100)
 }
 
-display_task : boolean = false
-task_picked : Task = new Task('','',undefined,undefined,undefined,undefined,undefined,undefined)
+}
 
-tasks:Task[] = [
+}
 
-new Task(
-  'id1',
-'task1',
-['LOCATION'],
-0,
-new Date().getTime(),
-"We wan't your location for a study",
-new Date(2019,1,1).getTime(),
-'actor_entity_id1'
-),
-
-new Task(
-  'id3',
-'task3',
-['THREE_DIMENSIONS'],
-new Date(2019,3,1).getTime(),
-new Date().getTime(),
-"We wan't your location for a study",
-new Date(2019,3,1).getTime(),
-'actor_entity_id1'
-)
-
-]
+getDate(n:number){
+  return new Date(n)
+}
 
 async setChild(task : Task){
   this.task_picked = task
 }
 
 showDialog_Task(task : Task) {
-    this.setChild(task).then(()=>this.display_task = true)
-    
+    this.setChild(task).then(()=>this.display_task = true)  
 }
-
-}
-
-export class Task {
-
-  id : string
-  name: string;
-  types:string[];
-  from : number 
-  to : number 
-  description:string
-  registred_at:number
-  actor_entity_id : string
-
-  constructor(
-    id:string,
-    name:string,
-    types:string[],
-    from:number,
-    to:number,
-    description:string,
-    registred_at:number,
-    actor_entity_id : string
-    ){
-    this.id = id
-    this.name = name
-    this.types = types
-    this.from = from
-    this.to = to
-    this.description = description
-    this.registred_at = registred_at
-    this.actor_entity_id = actor_entity_id
-  }
-
-  getDate():Date{
-    return new Date(this.registred_at)
-  }
 
 }
