@@ -1,4 +1,8 @@
-# dcd-designer
+# DCD App - Designer
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/datacentricdesign/dcd-app-designer)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/datacentricdesign/dcd-app-designer)
+![Docker Build Status](https://img.shields.io/docker/build/datacentricdesign/dcd-app-designer)
 
 ## production mode
 
