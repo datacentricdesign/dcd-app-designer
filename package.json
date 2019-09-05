@@ -17,7 +17,7 @@
     "serve:ssr": "node dist/server",
     "prod": "npm run postinstall && npm run build:ssr && npm run serve:ssr",
     "watch:browser": "ng build --prod --base-href /designer/ --optimization=true --watch",
-    "watch:browser://doesn't works hmr": "ng build --base-href /designer/ --watch", 
+    "watch:browser://doesn't works hmr": "ng build --base-href /designer/ --watch",
     "predev": "ng run dcd-designer:server:production && npm run compile:server",
     "dev": "nodemon dist/server",
     "compile_@swimlane_ngx-charts": "babel node_modules/@swimlane/ngx-charts -d node_modules/@swimlane/ngx-charts --presets @babel/preset-env",
