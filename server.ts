@@ -65,8 +65,7 @@ const PORT = process.env.PORT || 8080;
 
 const baseUrl = process.env.BASE_URL || ""
 
-//const redirectUrl = process.env.BASE_URL || ""
-const redirectUrl = "/subject"
+const redirectUrl = process.env.BASE_URL || ""
 
 const google_maps_key = process.env.MAPS_KEY
 
