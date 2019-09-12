@@ -65,7 +65,7 @@ const PORT = process.env.PORT || 8080;
 
 const baseUrl = process.env.BASE_URL || '';
 
-const redirectUrl = (process.env.BASE_URL || '') + '/auth/callback';
+const redirectUrl = process.env.OAUTH2_REDIRECT_URL;
 
 const google_maps_key = process.env.MAPS_KEY;
 
@@ -116,7 +116,7 @@ const checkAuthentication = (req, res, next) => {
         // The `isAuthenticated` is available because of Passport.js
         if (!req.isAuthenticated()) {
             req.session.redirectTo = req.url;
-          res.redirect(redirectUrl + '/auth');
+          res.redirect(baseUrl + '/auth');
             return;
         }
         next();
@@ -136,7 +136,7 @@ async (req, res, next) => {
       res.render('index', { req });
 });
 
-app.get(redirectUrl + '/auth', passport.authenticate('oauth2'));
+app.get(baseUrl + '/auth', passport.authenticate('oauth2'));
 
 app.get(redirectUrl,
 
@@ -144,7 +144,7 @@ passport.authenticate('oauth2',
   {failureRedirect: '/auth'}),
   (req, res) => {
   // After success, redirect to the page we came from originally
-  console.log('/auth/callback ' + req['session'].redirectTo);
+  console.log(redirectUrl + ' ' + req['session'].redirectTo);
   res.redirect(req['session'].redirectTo);
   }
 );
